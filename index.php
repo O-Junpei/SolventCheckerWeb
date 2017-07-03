@@ -28,7 +28,7 @@
 
   <header id="header" class="container">
     <h1 class="text-center">ようえきちぇっか～</h1>
-    <button type="button" class="btn btn-primary btn-lg btn-block" onClick="window.open('/export.php')")>PDF Export</button>
+    <button type="button" class="btn btn-primary btn-lg btn-block" onClick="window.open('export.php')")>PDF Export</button>
   </header><!-- /header -->
 
 
