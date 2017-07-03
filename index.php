@@ -7,11 +7,6 @@
     $json = file_get_contents($jsonUrl);
     $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
     $obj = json_decode($json,true);
-    foreach ($obj as $key => $val){
-      #echo "<div class='box' style='margin: 0 0 40px'>";
-      #echo "<p>" . "date:" . $val["date"] ."   " ."data:". $val["data"] ."</p>";
-      #echo "</div>";
-    }
   }else {
     echo "データがありません";
   }
@@ -54,9 +49,9 @@
             echo $i;
             echo "</th>";
             echo "<td>";
-            echo $val["date"];
+            echo $val["year"]."/".$val["month"]."/".$val["day"]." ".$val["hour"].":".$val["minute"].":".$val["second"];
             echo "</td><td>";
-            echo $val["data"];
+            echo $val["data"]." L";
             echo "</td></tr>";
           }
         ?>

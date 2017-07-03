@@ -7,7 +7,6 @@ $password = "";
 $data = "";
 $message = "";
 
-
 function saveData($data){
 
   $jsonUrl = "log.json"; //JSONファイルの場所とファイル名を記述
@@ -23,12 +22,27 @@ function saveData($data){
 
   // date()で日時を出力
   $timestamp = time() ;
-  $nowString = "";
-  $nowString = date( "Y/m/d H:i:s" , $timestamp ) ;
+  $yearStr = "";
+  $yearStr = date( "Y" , $timestamp );
+  $monthStr = "";
+  $monthStr = date( "m" , $timestamp );
+  $dayStr = "";
+  $dayStr = date( "d" , $timestamp );
+  $hourStr = "";
+  $hourStr = date( "H" , $timestamp );
+  $minuteStr = "";
+  $minuteStr = date( "i" , $timestamp );
+  $secondStr = "";
+  $secondStr = date( "i" , $timestamp );
 
   $array = array(
-    "date" => $nowString  ,
-    "data" => $data );
+    "data" => $data  ,
+    "year" => $yearStr  ,
+    "month" => $monthStr  ,
+    "day" => $dayStr  ,
+    "hour" => $hourStr  ,
+    "minute" => $minuteStr  ,
+    "second" => $secondStr );
 
   $obj[count($obj)] = $array;
 
@@ -38,7 +52,6 @@ function saveData($data){
 
   return "Success";
 }
-
 
 try {
   $password = $_GET['pass'];
