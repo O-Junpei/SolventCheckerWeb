@@ -28,7 +28,9 @@
 
   <header id="header" class="container">
     <h1 class="text-center">ようえきちぇっか～</h1>
+    <button type="button" class="btn btn-primary btn-lg btn-block" onClick="window.open('/export.php')")>PDF Export</button>
   </header><!-- /header -->
+
 
   <div class="container">
     <table class="table table-inverse">
@@ -61,7 +63,5 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
