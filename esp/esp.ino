@@ -1,3 +1,4 @@
+#include <SD.h>
 #include <RCS620S.h>
 #include <HX711.h>
 
@@ -16,6 +17,12 @@ RCS620S rcs620s;
 //ロードセル関係
 HX711 scale(14, 15);
 
+//SD関係
+#define LOG_FILE_NAME "/log.txt"
+const uint8_t SD_CS = 5; // GPIO5=CS
+static File s_myFile;
+
+
 void setup() { 
 
   int ret;
@@ -29,6 +36,11 @@ void setup() {
   ledcAttachPin(BUZZER_PIN, LEDC_CHANNEL);
 
   callZeldaSound();
+  Serial.println("kokokara");
+
+  SD_init();
+  SD_write();
+  Serial.println(SD_read());
 
   while (!ret) {
       ret = rcs620s.initDevice();
@@ -37,7 +49,55 @@ void setup() {
       delay(1000);
   }
 }
- 
+
+
+void SD_init()
+{
+    Serial.print("Initializing SD card...");
+
+    if (!SD.begin(SD_CS)) {
+      Serial.println("initialization failed!");
+      return;
+    }
+    Serial.println("initialization done.");        
+}
+
+String SD_read() {
+
+    String str;
+
+    File file = SD.open(LOG_FILE_NAME, FILE_READ);
+
+    if(file){
+        //---1byteずつ読み込んだ文字を結合
+        while (file.available()) {
+            str += char(file.read());
+        }
+    } else{
+        Serial.println(" error...");
+    }
+    //---ファイルを閉じる
+    file.close();
+    
+    return str;
+}
+
+void SD_write()
+{
+    String backLog = SD_read();
+
+    s_myFile = SD.open(LOG_FILE_NAME, FILE_WRITE);
+    if (s_myFile) {
+        Serial.print("Writing to test.txt...");
+        s_myFile.print(backLog);
+        s_myFile.println("testing 1, 2, 3.");
+        s_myFile.close();
+        Serial.println("done.");
+    } else {
+        Serial.println("error opening test.txt");
+    }
+}
+
 
 void loop() {
   int ret, i;
