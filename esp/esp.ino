@@ -1,6 +1,13 @@
+#include <WiFi.h>
+#include <time.h>
 #include <SD.h>
 #include <RCS620S.h>
 #include <HX711.h>
+
+//Wifi関係
+#define JST     3600* -9
+const char* ssid = "2balf";
+const char* password = "phenolammonia";
 
 //フェリカ関係
 #define COMMAND_TIMEOUT 400
@@ -25,24 +32,24 @@ void setup() {
 
   Serial.begin(115200);      // for RC-S620/S
 
-  //felica
-  int ret;
-  ret = rcs620s.initDevice();
+  //wifi
+  wifiConnect();
+  Serial.println(getTimeString());
 
   // 音を鳴らす準備
   ledcSetup(LEDC_CHANNEL, LEDC_BASE_FREQ, LEDC_TIMER_BIT);
   ledcAttachPin(BUZZER_PIN, LEDC_CHANNEL);
-  //callZeldaSound();
+  callZeldaSound();
 
   //SDの確認
   SD_init();
-  //SD_write("17/09/32","idididid", "32567");
-  //Serial.println(SD_read());
 
+  //felica
+  int ret;
+  ret = rcs620s.initDevice();
   while (!ret) {
       ret = rcs620s.initDevice();
       Serial.println(" blooking ");
-      Serial.println(scale.read());
       delay(1000);
   }
 }
@@ -55,13 +62,19 @@ void loop() {
   ret = rcs620s.polling();
   
   if(ret) {
+
+    String felicaID = "";
     for(i = 0; i < 8; i++)
     {
-      if(rcs620s.idm[i] / 0x10 == 0) Serial.print(0);
-      Serial.print(rcs620s.idm[i], HEX);
+      if(rcs620s.idm[i] / 0x10 == 0) felicaID += "0";
+      //Serial.print(rcs620s.idm[i], HEX);
+      felicaID += String(rcs620s.idm[i], HEX);
     }
-    Serial.println();
 
+    String weight = String(getAverageWeight());
+    String date = String(getTimeString());
+
+    SD_write(date, felicaID, weight);
     callZeldaSound();
     
     delay(5000);
