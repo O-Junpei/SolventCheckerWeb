@@ -31,10 +31,11 @@ static File s_myFile;
 void setup() { 
 
   Serial.begin(115200);      // for RC-S620/S
+  Serial.println("Initing");
 
   //wifi
-  wifiConnect();
-  Serial.println(getTimeString());
+  //wifiConnect();
+  //Serial.println(getTimeString());
 
   // 音を鳴らす準備
   ledcSetup(LEDC_CHANNEL, LEDC_BASE_FREQ, LEDC_TIMER_BIT);
@@ -71,11 +72,12 @@ void loop() {
       felicaID += String(rcs620s.idm[i], HEX);
     }
 
+    callZeldaSound();
+
     String weight = String(getAverageWeight());
     String date = String(getTimeString());
 
     SD_write(date, felicaID, weight);
-    callZeldaSound();
     
     delay(5000);
     

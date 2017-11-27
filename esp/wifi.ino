@@ -1,6 +1,6 @@
 
 void wifiConnect(){
-  
+  Serial.print("wifi connect start");
   WiFi.begin(ssid, password);
   while(WiFi.status() != WL_CONNECTED) {
     Serial.print('.');
