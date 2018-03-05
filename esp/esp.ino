@@ -4,6 +4,11 @@
 #include <RCS620S.h>
 #include <HX711.h>
 
+//SD関係
+#define LOG_FILE_NAME "/log.txt"
+#define SD_CS 5
+static File s_myFile;
+
 //Wifi関係
 #define JST     3600* -9
 const char* ssid = "2balf";
@@ -23,27 +28,27 @@ RCS620S rcs620s;
 //ロードセル関係
 HX711 scale(14, 15);
 
-//SD関係
-#define LOG_FILE_NAME "/log.txt"
-#define SD_CS 5
-static File s_myFile;
-
 void setup() { 
 
   Serial.begin(115200);      // for RC-S620/S
   Serial.println("Initing");
 
+  // 音を鳴らす準備
+  ledcSetup(LEDC_CHANNEL, LEDC_BASE_FREQ, LEDC_TIMER_BIT);
+  ledcAttachPin(BUZZER_PIN, LEDC_CHANNEL);
+  //callMaryHadLittleLampSound();
+
+  //SDの初期化
+  //初期化に失敗するとメリーさんの羊が再生される。
+  if (!SD_init()){
+    callMaryHadLittleLampSound(); 
+  }
+
   //wifi
   //wifiConnect();
   //Serial.println(getTimeString());
 
-  // 音を鳴らす準備
-  ledcSetup(LEDC_CHANNEL, LEDC_BASE_FREQ, LEDC_TIMER_BIT);
-  ledcAttachPin(BUZZER_PIN, LEDC_CHANNEL);
-  callZeldaSound();
-
-  //SDの確認
-  SD_init();
+  
 
   //felica
   int ret;

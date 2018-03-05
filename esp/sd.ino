@@ -1,12 +1,12 @@
-void SD_init()
+bool SD_init()
 {
     Serial.print("Initializing SD card...");
-
     if (!SD.begin(SD_CS)) {
       Serial.println("initialization failed!");
-      return;
+      return false;
     }
-    Serial.println("initialization done.");        
+    Serial.println("initialization done.");   
+    return true;   
 }
 
 String SD_read() {
